@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>InstantlyClaw — Get Instant Demo Access to OpenClaw</title>
+  <meta name="description" content="OpenClaw is the AI agent platform everyone's talking about. Skip the painful setup — get your hosted, ready-to-use system live in minutes." />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── RESET ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; overflow-x: hidden; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #020714;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ── BACKGROUND ─────────────────────────────── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-base {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(168deg, #020714 0%, #030e20 45%, #040f1e 100%);
+    }
+
+    .bg-glow {
+      position: absolute;
+      top: -18%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150%;
+      height: 75vh;
+      background: radial-gradient(ellipse at 50% 0%,
+        rgba(255,98,38,.28) 0%,
+        rgba(255,60,20,.1) 38%,
+        transparent 68%);
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.038) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.038) 1px, transparent 1px);
+      background-size: 66px 66px;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,1) 0%, transparent 72%);
+      mask-image: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,1) 0%, transparent 72%);
+    }
+
+    .bg-rings {
+      position: absolute;
+      top: -8%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 190%;
+      aspect-ratio: 1;
+      background:
+        repeating-radial-gradient(
+          circle at 50% 10%,
+          transparent 0, transparent 130px,
+          rgba(255,80,28,.13) 130px, rgba(255,80,28,.13) 132px,
+          transparent 132px, transparent 195px,
+          rgba(255,80,28,.07) 195px, rgba(255,80,28,.07) 197px,
+          transparent 197px, transparent 265px,
+          rgba(255,80,28,.04) 265px, rgba(255,80,28,.04) 267px,
+          transparent 267px
+        );
+    }
+
+    /* ── LAYOUT ─────────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 22px 16px 48px;
+    }
+
+    /* ── BADGE ──────────────────────────────────── */
+    .badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: fit-content;
+      max-width: 94%;
+      margin: 0 auto 24px;
+      padding: 10px 22px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255,98,38,.14), rgba(255,55,18,.07));
+      border: 1px solid rgba(255,100,40,.28);
+      box-shadow: 0 0 24px rgba(255,80,30,.1), inset 0 1px 0 rgba(255,255,255,.06);
+      font-size: clamp(12px, 1.5vw, 14px);
+      font-weight: 600;
+      color: rgba(255,176,110,.95);
+      letter-spacing: .025em;
+      text-align: center;
+      animation: fadeDown .6s ease both;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ff6228;
+      box-shadow: 0 0 9px rgba(255,100,40,.85);
+      flex-shrink: 0;
+      animation: blink 2.2s ease infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .55; transform: scale(.82); }
+    }
+
+    /* ── HERO ───────────────────────────────────── */
+    .hero {
+      text-align: center;
+      max-width: 1060px;
+      margin: 0 auto;
+      animation: fadeUp .7s ease .08s both;
+    }
+
+    .headline {
+      line-height: .96;
+      letter-spacing: -.032em;
+      margin-bottom: 18px;
+    }
+
+    .headline .l1 {
+      display: block;
+      font-size: clamp(28px, 5.6vw, 70px);
+      font-weight: 900;
+      color: rgba(200,215,248,.28);
+    }
+    .headline .l2 {
+      display: block;
+      font-size: clamp(32px, 6.4vw, 82px);
+      font-weight: 900;
+      color: #ffffff;
+      margin-top: 4px;
+    }
+    .headline .l3 {
+      display: block;
+      font-size: clamp(36px, 7vw, 90px);
+      font-weight: 900;
+      color: #ffb320;
+      margin-top: 6px;
+      text-shadow: 0 0 55px rgba(255,179,32,.32), 0 0 120px rgba(255,140,20,.12);
+    }
+
+    .copy {
+      max-width: 860px;
+      margin: 0 auto 14px;
+      font-size: clamp(14px, 1.75vw, 21px);
+      line-height: 1.52;
+      color: rgba(200,216,248,.42);
+      font-weight: 500;
+    }
+    .copy strong { color: #fff; font-weight: 800; }
+
+    .sub {
+      max-width: 840px;
+      margin: 0 auto 18px;
+      font-size: clamp(16px, 2vw, 28px);
+      line-height: 1.26;
+      color: #ffb320;
+      font-weight: 800;
+    }
+
+    /* ── URGENCY BAR ────────────────────────────── */
+    .urgency-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: fit-content;
+      max-width: 90%;
+      margin: 0 auto 22px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(255,80,30,.07);
+      border: 1px solid rgba(255,80,30,.18);
+      font-size: clamp(12px, 1.35vw, 14px);
+      color: rgba(255,162,100,.88);
+      font-weight: 600;
+      letter-spacing: .01em;
+      animation: fadeUp .7s ease .18s both;
+    }
+    .urgency-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ff5c20;
+      flex-shrink: 0;
+      animation: blink 1.8s ease infinite;
+    }
+
+    /* ── LAPTOP MOCKUP ──────────────────────────── */
+    .laptop-outer {
+      max-width: 1080px;
+      margin: 0 auto;
+      animation: fadeUp .8s ease .22s both;
+    }
+
+    .laptop {
+      position: relative;
+      padding: 14px 14px 10px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #1f1f1f 0%, #080808 100%);
+      border: 3px solid rgba(255,255,255,.5);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.04) inset,
+        0 42px 90px rgba(0,0,0,.62),
+        0 0 80px rgba(255,98,38,.07);
+    }
+
+    /* screen shine overlay */
+    .laptop::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 52%;
+      border-radius: 28px 28px 0 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.042), transparent);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .laptop-notch {
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 20px;
+      background: #111;
+      border-radius: 0 0 13px 13px;
+      border: 3px solid rgba(255,255,255,.5);
+      border-top: 0;
+      z-index: 3;
+    }
+
+    .screen {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #070707;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.07) inset;
+    }
+
+    .screen iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    .video-fallback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 18px;
+      background: linear-gradient(160deg, #0c1629, #091320);
+      color: #fff;
+      text-decoration: none;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .play-btn {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: rgba(255,98,38,.18);
+      border: 2px solid rgba(255,98,38,.38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .video-fallback:hover .play-btn {
+      transform: scale(1.1);
+      background: rgba(255,98,38,.3);
+    }
+    .play-btn::before {
+      content: "";
+      display: block;
+      margin-left: 6px;
+      width: 0; height: 0;
+      border-top: 14px solid transparent;
+      border-bottom: 14px solid transparent;
+      border-left: 22px solid #fff;
+    }
+    .video-fallback span {
+      font-size: clamp(14px, 1.8vw, 20px);
+      font-weight: 700;
+      max-width: 480px;
+      line-height: 1.45;
+    }
+
+    .laptop-base {
+      width: 36%;
+      height: 12px;
+      margin: 9px auto 0;
+      border-radius: 0 0 12px 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(130,130,130,.18));
+    }
+
+    /* ── OPT-IN BOX ─────────────────────────────── */
+    .optin {
+      max-width: 880px;
+      margin: 28px auto 0;
+      padding: 30px 26px 26px;
+      border-radius: 24px;
+      background: #fff;
+      color: #0f172a;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.06),
+        0 32px 90px rgba(0,0,0,.5),
+        0 0 70px rgba(255,98,38,.05);
+      animation: fadeUp .8s ease .3s both;
+    }
+
+    .optin-h2 {
+      text-align: center;
+      font-size: clamp(18px, 4.2vw, 34px);
+      line-height: 1.16;
+      font-weight: 900;
+      color: #0b1326;
+      margin-bottom: 8px;
+    }
+
+    .optin-sub {
+      text-align: center;
+      font-size: clamp(13px, 1.5vw, 16px);
+      color: #475569;
+      margin-bottom: 18px;
+      line-height: 1.55;
+    }
+
+    /* Trust chips */
+    .trust-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin-bottom: 20px;
+    }
+    .trust-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: clamp(11px, 1.2vw, 13px);
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    /* Divider */
+    .optin-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 0 0 18px;
+    }
+
+    /* Fields */
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .ic-input {
+      flex: 1;
+      width: 100%;
+      height: 56px;
+      border-radius: 13px;
+      border: 1.5px solid #e2e8f0;
+      padding: 0 16px;
+      font-size: 16px;
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
+      outline: none;
+      background: #f8fafc;
+      transition: border-color .18s, box-shadow .18s, background .18s;
+      -webkit-appearance: none;
+    }
+    .ic-input::placeholder { color: #94a3b8; }
+    .ic-input:focus {
+      border-color: #ff6228;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(255,98,40,.11);
+    }
+    .ic-input.err {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239,68,68,.1);
+    }
+
+    /* CTA button */
+    .ic-btn {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 60px;
+      border: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ff7540, #ff4918);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(15px, 2vw, 19px);
+      font-weight: 900;
+      letter-spacing: .01em;
+      cursor: pointer;
+      box-shadow:
+        0 14px 32px rgba(255,78,28,.38),
+        inset 0 1px 0 rgba(255,255,255,.16);
+      transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+      -webkit-appearance: none;
+      margin-top: 4px;
+    }
+    .ic-btn:hover {
+      filter: brightness(1.07);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 42px rgba(255,78,28,.44), inset 0 1px 0 rgba(255,255,255,.16);
+    }
+    .ic-btn:active { transform: translateY(0); filter: brightness(.97); }
+
+    /* Button shimmer on hover */
+    .ic-btn::after {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.16), transparent);
+      transition: left .55s ease;
+    }
+    .ic-btn:hover::after { left: 160%; }
+
+    .btn-label { position: relative; z-index: 1; display: block; }
+    .btn-spin {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .ic-btn.loading .btn-label { visibility: hidden; }
+    .ic-btn.loading .btn-spin { display: flex; }
+
+    .ring {
+      width: 26px;
+      height: 26px;
+      border: 3px solid rgba(255,255,255,.28);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Legal */
+    .legal {
+      margin-top: 12px;
+      text-align: center;
+      font-size: clamp(10px, 1.1vw, 12px);
+      line-height: 1.55;
+      color: #94a3b8;
+    }
+    .legal a { color: #64748b; text-decoration: underline; }
+
+    .disc {
+      margin-top: 8px;
+      text-align: center;
+      font-size: clamp(9px, 1.05vw, 11px);
+      line-height: 1.55;
+      color: #94a3b8;
+    }
+    .disc strong { color: #64748b; }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      font-size: clamp(9px, 1.05vw, 11px);
+      color: rgba(255,255,255,.32);
+      line-height: 1.65;
+      padding: 0 12px;
+      animation: fadeUp .8s ease .38s both;
+    }
+    .footer a { color: rgba(255,255,255,.4); text-decoration: underline; }
+
+    /* ── SUCCESS MODAL ──────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(2,7,22,.8);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.show { display: flex; animation: fadeIn .3s ease both; }
+
+    .modal-box {
+      width: 100%;
+      max-width: 440px;
+      background: #fff;
+      border-radius: 26px;
+      padding: 38px 30px 34px;
+      text-align: center;
+      box-shadow: 0 44px 110px rgba(0,0,0,.55);
+      animation: popIn .38s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    .modal-icon {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff7540, #ff4918);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 36px;
+      box-shadow: 0 14px 34px rgba(255,78,28,.32);
+    }
+
+    .modal-box h3 {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .modal-box p {
+      font-size: 15px;
+      color: #64748b;
+      line-height: 1.55;
+    }
+
+    .modal-progress {
+      margin-top: 22px;
+      height: 5px;
+      background: #f1f5f9;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .modal-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff7540, #ff4918);
+      border-radius: 999px;
+      transition: width 1.8s linear;
+    }
+
+    /* ── KEYFRAMES ──────────────────────────────── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.86); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────── */
+    @media (min-width: 640px) {
+      .wrap { padding: 28px 24px 56px; }
+      .badge { margin-bottom: 30px; }
+      .laptop {
+        padding: 18px 18px 14px;
+        border-radius: 36px;
+        border-width: 4px;
+      }
+      .laptop::before { border-radius: 36px 36px 0 0; }
+      .laptop-base { height: 16px; }
+      .optin { margin-top: 38px; padding: 38px 34px 32px; }
+      .ic-input { height: 60px; font-size: 17px; }
+      .ic-btn { height: 64px; }
+    }
+
+    @media (max-width: 440px) {
+      .form-row { flex-direction: column; }
+      .laptop { padding: 10px 10px 8px; border-radius: 18px; }
+      .laptop-notch { width: 80px; height: 17px; }
+      .screen { border-radius: 10px; }
+      .optin { padding: 20px 14px 18px; border-radius: 18px; margin-top: 22px; }
+      .ic-input { height: 52px; border-radius: 12px; }
+      .ic-btn { height: 56px; border-radius: 12px; }
+      .modal-box { padding: 30px 20px 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg" aria-hidden="true">
+    <div class="bg-base"></div>
+    <div class="bg-glow"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-rings"></div>
+  </div>
+
+  <div class="page">
+    <div class="wrap">
+
+      <!-- Badge -->
+      <div class="badge">
+        <span class="badge-dot"></span>
+        The OpenClaw Solution Everyone's Been Waiting For
+      </div>
+
+      <!-- Hero -->
+      <div class="hero">
+        <h1 class="headline">
+          <span class="l1">YOU HEARD ABOUT OPENCLAW</span>
+          <span class="l2">NOW YOU CAN</span>
+          <span class="l3">ACTUALLY USE IT.</span>
+        </h1>
+
+        <p class="copy">
+          OpenClaw is a powerful AI agent platform — but it can still
+          <strong>eat up your weekend, cost you extra setup money, and create technical headaches</strong>
+          if you try to piece everything together yourself. InstantlyClaw removes the friction.
+          One click. Faster setup. Done.
+        </p>
+
+        <p class="sub">
+          Your hosted, ready-to-use AI system — live before your coffee gets cold.
+        </p>
+      </div>
+
+      <!-- Urgency bar -->
+      <div class="urgency-bar" aria-live="polite">
+        <span class="urgency-dot"></span>
+        <span id="urgencyText">🔥 <strong>247 people</strong> accessed the demo today — limited spots available</span>
+      </div>
+
+      <!-- Laptop / Video -->
+      <div class="laptop-outer">
+        <div class="laptop">
+          <div class="laptop-notch" aria-hidden="true"></div>
+          <div class="screen">
+            <iframe
+              id="vimeoFrame"
+              src="https://player.vimeo.com/video/1175925647?badge=0&autopause=0&player_id=0&app_id=58479"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              title="InstantlyClaw Demo Video"
+            ></iframe>
+            <a class="video-fallback" id="videoFallback"
+               href="https://vimeo.com/1175925647"
+               target="_blank" rel="noopener noreferrer">
+              <div class="play-btn" aria-hidden="true"></div>
+              <span>Watch the InstantlyClaw demo on Vimeo →</span>
+            </a>
+          </div>
+        </div>
+        <div class="laptop-base" aria-hidden="true"></div>
+      </div>
+
+      <!-- Opt-in Box -->
+      <div class="optin">
+        <h2 class="optin-h2">Enter Your Details To Get Instant Demo Access + Quick-Start Guide</h2>
+        <p class="optin-sub">
+          See exactly how InstantlyClaw works, what's included, and how to get started without the usual setup mess.
+        </p>
+
+        <!-- Trust chips -->
+        <div class="trust-row" role="list">
+          <div class="trust-chip" role="listitem">🔒 100% Secure</div>
+          <div class="trust-chip" role="listitem">🚫 Zero Spam</div>
+          <div class="trust-chip" role="listitem">⚡ Instant Access</div>
+          <div class="trust-chip" role="listitem">🔓 Unsubscribe Anytime</div>
+        </div>
+
+        <div class="optin-divider" aria-hidden="true"></div>
+
+        <form id="optinForm" novalidate>
+          <div class="form-grid">
+            <div class="form-row">
+              <input
+                type="text"
+                id="fieldFirstName"
+                class="ic-input"
+                placeholder="First name"
+                autocomplete="given-name"
+              />
+              <input
+                type="text"
+                id="fieldLastName"
+                class="ic-input"
+                placeholder="Last name"
+                autocomplete="family-name"
+              />
+            </div>
+            <input
+              type="email"
+              id="fieldEmail"
+              class="ic-input"
+              placeholder="Your best email address"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <button type="submit" class="ic-btn" id="submitBtn">
+            <span class="btn-label">Get Instant Access →</span>
+            <span class="btn-spin" aria-hidden="true"><span class="ring"></span></span>
+          </button>
+        </form>
+
+        <p class="legal">
+          By submitting, you agree to our
+          <a href="/terms.html" target="_blank" rel="noopener">Terms of Service</a>
+          and
+          <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
+        </p>
+
+        <p class="disc">
+          <strong>Affiliate disclosure:</strong> this page contains affiliate links.
+          If you purchase through them, we may earn a commission at no extra cost to you.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <p>Results vary. No income or earnings guarantees are made or implied. This site is independently operated and is not the official vendor page.</p>
+        <p style="margin-top:5px">
+          © 2025 InstantlyClaw &nbsp;·&nbsp;
+          <a href="/privacy.html">Privacy Policy</a>
+          &nbsp;·&nbsp;
+          <a href="/terms.html">Terms of Service</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Access granted">
+    <div class="modal-box">
+      <div class="modal-icon" aria-hidden="true">🎉</div>
+      <h3>You're In!</h3>
+      <p>Redirecting you to your demo access now…</p>
+      <div class="modal-progress">
+        <div class="modal-bar" id="modalBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ─────────────────────────────────────────────
+       CONFIG — fill in before going live
+    ───────────────────────────────────────────── */
+    const AFFILIATE_LINK  = "https://jvz8.com/c/3492357/436241/";
+    const GHL_WEBHOOK_URL = ""; // ← Paste your GoHighLevel webhook URL here
+    const REDIRECT_DELAY  = 1900; // ms before redirect after success
+    /* ───────────────────────────────────────────── */
+
+    const form        = document.getElementById("optinForm");
+    const emailEl     = document.getElementById("fieldEmail");
+    const firstEl     = document.getElementById("fieldFirstName");
+    const lastEl      = document.getElementById("fieldLastName");
+    const submitBtn   = document.getElementById("submitBtn");
+    const modal       = document.getElementById("modalOverlay");
+    const modalBar    = document.getElementById("modalBar");
+    const vimeoFrame  = document.getElementById("vimeoFrame");
+    const videoFallback = document.getElementById("videoFallback");
+
+    /* ── FORM SUBMIT ───────────────────────────── */
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const email     = emailEl.value.trim();
+      const firstName = firstEl.value.trim();
+      const lastName  = lastEl.value.trim();
+
+      // Validate email
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailEl.classList.add("err");
+        emailEl.focus();
+        setTimeout(() => emailEl.classList.remove("err"), 2800);
+        return;
+      }
+
+      // Loading state
+      submitBtn.classList.add("loading");
+      submitBtn.disabled = true;
+
+      // Send to GoHighLevel
+      try {
+        if (GHL_WEBHOOK_URL) {
+          await fetch(GHL_WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              firstName : firstName || undefined,
+              lastName  : lastName  || undefined,
+              email     : email,
+              source    : "InstantlyClaw Funnel",
+              tags      : ["openclaw-optin"]
+            })
+          });
+        }
+      } catch (err) {
+        console.warn("GHL webhook error (non-blocking):", err);
+      }
+
+      // Show success + animate progress bar
+      modal.classList.add("show");
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { modalBar.style.width = "100%"; });
+      });
+
+      // Redirect to affiliate link
+      setTimeout(() => { window.location.href = AFFILIATE_LINK; }, REDIRECT_DELAY);
+    });
+
+    /* ── VIDEO FALLBACK ────────────────────────── */
+    let iframeOk = false;
+    vimeoFrame.addEventListener("load", () => { iframeOk = true; });
+    setTimeout(() => {
+      if (!iframeOk) videoFallback.style.display = "flex";
+    }, 4200);
+
+    /* ── LIVE URGENCY COUNTER ──────────────────── */
+    const urgencyText = document.getElementById("urgencyText");
+    let count = 247 + Math.floor(Math.random() * 22);
+    urgencyText.innerHTML = `🔥 <strong>${count} people</strong> accessed the demo today — limited spots available`;
+
+    setInterval(() => {
+      if (Math.random() > .52) {
+        count += Math.floor(Math.random() * 3) + 1;
+        urgencyText.innerHTML = `🔥 <strong>${count} people</strong> accessed the demo today — limited spots available`;
+      }
+    }, 14000);
+  </script>
+</body>
+</html>

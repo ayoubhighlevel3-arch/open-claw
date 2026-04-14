@@ -1,0 +1,40 @@
+[build]
+  publish = "."
+
+# Security headers for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options    = "nosniff"
+    X-Frame-Options           = "SAMEORIGIN"
+    Referrer-Policy           = "strict-origin-when-cross-origin"
+    Permissions-Policy        = "camera=(), microphone=(), geolocation=()"
+
+# Cache HTML short (always fresh)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Cache static assets longer
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Clean URLs — /terms → /terms.html
+[[redirects]]
+  from   = "/terms"
+  to     = "/terms.html"
+  status = 200
+
+[[redirects]]
+  from   = "/privacy"
+  to     = "/privacy.html"
+  status = 200
+
+# Catch-all 404
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 404
