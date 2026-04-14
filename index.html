@@ -419,17 +419,101 @@
     @keyframes popUp   { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: scale(1); } }
 
     /* ── RESPONSIVE ─── */
+
+    /* Desktop / tablet */
     @media (min-width: 640px) {
-      .wrap { padding: 40px 28px 64px; }
-      .optin { padding: 40px 36px 34px; }
-      .ic-input { height: 56px; font-size: 16px; }
-      .cta-btn { height: 60px; font-size: 17px; }
+      .wrap        { padding: 40px 32px 64px; }
+      .optin-inner { padding: 32px 32px 28px; }
+      .ic-input    { height: 58px; font-size: 16px; }
+      .cta-btn     { height: 62px; font-size: 17px; }
     }
 
-    @media (max-width: 420px) {
-      .optin { padding: 24px 18px 22px; border-radius: 14px; }
-      .ic-input { height: 50px; border-radius: 9px; }
-      .cta-btn { height: 54px; border-radius: 9px; }
+    /* Small mobile — 430px and below */
+    @media (max-width: 430px) {
+      .wrap {
+        padding: 20px 14px 44px;      /* tighter side padding */
+      }
+
+      /* Live notice — smaller text, less gap */
+      .live-notice {
+        font-size: 11.5px;
+        margin-bottom: 22px;
+        letter-spacing: .02em;
+      }
+
+      /* Hero — headline stays tight */
+      .hero { margin-bottom: 20px; }
+      h1 {
+        font-size: clamp(30px, 9.5vw, 48px); /* prevents overflow on 375px */
+        letter-spacing: -.035em;
+        margin-bottom: 16px;
+      }
+      .hero-body  { font-size: 14px; margin-bottom: 14px; }
+      .hero-kicker { font-size: 15px; }
+
+      /* Watcher bar — trim the separator & second label */
+      .watcher {
+        font-size: 12.5px;
+        gap: 6px;
+        margin: 14px 0 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .watcher-sep { display: none; }
+
+      /* Laptop chrome — smaller dots on tiny screens */
+      .laptop {
+        padding: 9px 9px 6px;
+        border-radius: 13px;
+      }
+      .laptop-top   { padding: 0 3px 7px; gap: 5px; }
+      .dot          { width: 8px; height: 8px; }
+      .screen       { border-radius: 8px; }
+      .video-block  { margin-bottom: 24px; }
+
+      /* Optin card */
+      .optin        { border-radius: 16px; }
+      .optin-inner  { padding: 20px 16px 18px; }
+
+      .proof-line   { font-size: 12px; margin-bottom: 10px; }
+
+      .optin h2 {
+        font-size: clamp(17px, 5.5vw, 22px);
+        margin-bottom: 14px;
+      }
+
+      /* Inputs — large enough to tap, no zoom on focus */
+      .form-fields  { gap: 9px; margin-bottom: 9px; }
+      .ic-input {
+        height: 52px;
+        font-size: 16px; /* prevents iOS auto-zoom */
+        border-radius: 10px;
+        padding: 0 14px;
+      }
+
+      /* CTA — big tap target */
+      .cta-btn {
+        height: 56px;
+        font-size: 15px;
+        border-radius: 11px;
+        margin-top: 0;
+      }
+
+      /* Below trust row — wrap on one line */
+      .below {
+        gap: 4px 12px;
+        margin-top: 10px;
+      }
+      .below span { font-size: 10.5px; }
+
+      /* Legal fine print */
+      .fine-print { font-size: 9.5px; margin-top: 10px; }
+    }
+
+    /* Prevent hover lift on touch devices */
+    @media (hover: none) {
+      .cta-btn:hover { transform: none; filter: none; box-shadow: 0 14px 36px rgba(255,64,16,.4), inset 0 1px 0 rgba(255,255,255,.16); }
+      .cta-btn:hover::before { left: -120%; }
     }
   </style>
 </head>
