@@ -221,113 +221,133 @@
       color: rgba(255,255,255,.6);
     }
 
-    /* ── OPT-IN BOX ─── */
+    /* ── OPT-IN CARD (dark glass) ─── */
     .optin {
-      background: #fff;
-      border-radius: 16px;
-      padding: 32px 28px 28px;
-      color: #0f172a;
-      box-shadow: 0 24px 80px rgba(0,0,0,.55);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 36px 100px rgba(0,0,0,.65), 0 0 80px rgba(255,100,40,.06);
       animation: fadeUp .65s ease .28s both;
     }
-
-    .optin-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: #f5a623;
-      margin-bottom: 10px;
+    .optin-bar {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ff7540 20%, #f5a623 50%, #ff7540 80%, transparent);
     }
+    .optin-inner {
+      padding: 28px 26px 26px;
+      background: rgba(6,12,30,.94);
+      border: 1px solid rgba(255,255,255,.08);
+      border-top: 0;
+      border-radius: 0 0 20px 20px;
+    }
+
+    /* Social proof */
+    .proof-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .avs { display: flex; }
+    .av {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(6,12,30,.95);
+      margin-right: -7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .av:last-child { margin-right: 0; }
+    .av1 { background: linear-gradient(135deg,#f97316,#ea580c); }
+    .av2 { background: linear-gradient(135deg,#3b82f6,#1d4ed8); }
+    .av3 { background: linear-gradient(135deg,#10b981,#059669); }
+    .av4 { background: linear-gradient(135deg,#a855f7,#7c3aed); }
+    .proof-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(200,215,255,.5);
+      line-height: 1.4;
+    }
+    .proof-text strong { color: rgba(255,195,120,.85); font-weight: 700; }
 
     .optin h2 {
-      font-size: clamp(20px, 4vw, 30px);
+      font-size: clamp(19px, 3.5vw, 28px);
       font-weight: 900;
-      line-height: 1.18;
-      color: #0d111c;
-      margin-bottom: 8px;
+      line-height: 1.2;
+      color: #fff;
       letter-spacing: -.02em;
+      margin-bottom: 6px;
     }
-
     .optin-sub {
-      font-size: 15px;
-      color: #64748b;
+      font-size: 14px;
+      color: rgba(190,210,255,.45);
       line-height: 1.6;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
-    /* What's inside - flat list, no box styling */
+    /* Value stack */
     .gets {
       list-style: none;
-      margin-bottom: 24px;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 8px;
+      margin-bottom: 22px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
     }
     .gets li {
       display: flex;
       align-items: flex-start;
       gap: 9px;
-      font-size: 14px;
-      color: #334155;
-      line-height: 1.5;
+      font-size: 13.5px;
+      color: rgba(205,220,255,.72);
+      line-height: 1.45;
     }
     .gets li::before {
       content: "✓";
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 900;
       color: #f5a623;
       flex-shrink: 0;
       margin-top: 1px;
     }
-    .gets li strong { color: #0d111c; font-weight: 700; }
+    .gets li strong { color: #fff; font-weight: 700; }
 
-    /* Form */
+    /* Form fields */
     .form-fields {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .field label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #94a3b8;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-
     .ic-input {
       width: 100%;
       height: 52px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 0 14px;
+      border: 1.5px solid rgba(255,255,255,.1);
+      border-radius: 11px;
+      padding: 0 16px;
       font-size: 15px;
       font-family: 'Inter', sans-serif;
-      color: #0f172a;
-      background: #f8fafc;
+      color: #fff;
+      background: rgba(255,255,255,.055);
       outline: none;
-      transition: border-color .18s, box-shadow .18s;
+      transition: border-color .18s, box-shadow .18s, background .18s;
       -webkit-appearance: none;
     }
-    .ic-input::placeholder { color: #cbd5e1; }
+    .ic-input::placeholder { color: rgba(255,255,255,.25); }
     .ic-input:focus {
-      border-color: #f5a623;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(245,166,35,.15);
+      border-color: rgba(245,166,35,.65);
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 0 0 4px rgba(245,166,35,.12);
     }
     .ic-input.err {
-      border-color: #ef4444;
-      box-shadow: 0 0 0 3px rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.7);
+      box-shadow: 0 0 0 4px rgba(239,68,68,.12);
     }
 
     .cta-btn {
@@ -336,38 +356,44 @@
       width: 100%;
       height: 56px;
       border: 0;
-      border-radius: 10px;
-      background: #f5a623;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff7e48, #ff4010);
       color: #fff;
       font-family: 'Inter', sans-serif;
-      font-size: 16px;
+      font-size: clamp(15px, 2vw, 18px);
       font-weight: 900;
       letter-spacing: .01em;
       cursor: pointer;
-      transition: background .18s, transform .15s, box-shadow .15s;
-      box-shadow: 0 8px 28px rgba(245,166,35,.35);
+      box-shadow: 0 14px 36px rgba(255,64,16,.4), inset 0 1px 0 rgba(255,255,255,.16);
+      transition: filter .15s, transform .15s, box-shadow .15s;
       -webkit-appearance: none;
+      margin-top: 2px;
     }
     .cta-btn:hover {
-      background: #e8981a;
-      transform: translateY(-1px);
-      box-shadow: 0 14px 36px rgba(245,166,35,.42);
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 46px rgba(255,64,16,.48), inset 0 1px 0 rgba(255,255,255,.16);
     }
-    .cta-btn:active { transform: translateY(0); }
+    .cta-btn:active { transform: translateY(0); filter: brightness(.97); }
+    .cta-btn::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -120%; width: 70%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      transition: left .55s ease;
+    }
+    .cta-btn:hover::before { left: 150%; }
 
     .cta-label { position: relative; z-index: 1; display: block; }
     .cta-spin {
-      position: absolute;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
+      position: absolute; inset: 0;
+      display: none; align-items: center; justify-content: center;
     }
     .cta-btn.loading .cta-label { visibility: hidden; }
     .cta-btn.loading .cta-spin { display: flex; }
     .spin-ring {
       width: 22px; height: 22px;
-      border: 3px solid rgba(255,255,255,.28);
+      border: 3px solid rgba(255,255,255,.25);
       border-top-color: #fff;
       border-radius: 50%;
       animation: spin .7s linear infinite;
@@ -376,33 +402,26 @@
 
     /* Below form */
     .below {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-top: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: 4px 16px; margin-top: 12px;
     }
     .below span {
-      font-size: 12px;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      font-size: 11px; color: rgba(255,255,255,.28);
+      display: flex; align-items: center; gap: 4px;
     }
 
     .legal {
-      margin-top: 16px;
+      margin-top: 14px;
       font-size: 11px;
-      color: #cbd5e1;
+      color: rgba(255,255,255,.2);
       line-height: 1.6;
     }
-    .legal a { color: #94a3b8; text-decoration: underline; }
+    .legal a { color: rgba(255,255,255,.32); text-decoration: underline; }
 
     .aff {
-      margin-top: 8px;
+      margin-top: 6px;
       font-size: 10px;
-      color: #cbd5e1;
+      color: rgba(255,255,255,.15);
       line-height: 1.6;
     }
 
@@ -543,68 +562,55 @@
       </div>
     </div>
 
-    <!-- Opt-in -->
+    <!-- Opt-in card (dark glass) -->
     <div class="optin">
-      <span class="optin-tag">Free instant access</span>
-      <h2>Watch the Full Demo + Get the Quick-Start Guide Sent to You Now</h2>
-      <p class="optin-sub">
-        No pitch. No bloated course. Just the demo, the guide, and the exact steps to get running fast.
-      </p>
+      <div class="optin-bar"></div>
+      <div class="optin-inner">
 
-      <ul class="gets">
-        <li><strong>The full demo video</strong> — see OpenClaw in action before committing a dollar</li>
-        <li><strong>The 30-minute Quick-Start Guide</strong> — go from zero to live without touching code</li>
-        <li><strong>Complete pricing breakdown</strong> — no surprises, no hidden fees</li>
-      </ul>
-
-      <form id="optinForm" novalidate>
-        <div class="form-fields">
-          <div class="field">
-            <label for="fieldName">First name</label>
-            <input
-              type="text"
-              id="fieldName"
-              class="ic-input"
-              placeholder="e.g. Jordan"
-              autocomplete="given-name"
-            />
+        <div class="proof-row">
+          <div class="avs">
+            <div class="av av4">A</div>
+            <div class="av av3">M</div>
+            <div class="av av2">J</div>
+            <div class="av av1">R</div>
           </div>
-          <div class="field">
-            <label for="fieldEmail">Email address <span style="color:#ef4444">*</span></label>
-            <input
-              type="email"
-              id="fieldEmail"
-              class="ic-input"
-              placeholder="you@email.com"
-              autocomplete="email"
-              required
-            />
-          </div>
+          <p class="proof-text"><strong id="proofNum">1,247+</strong> already have access</p>
         </div>
 
-        <button type="submit" class="cta-btn" id="submitBtn">
-          <span class="cta-label">Send Me Instant Access →</span>
-          <span class="cta-spin" aria-hidden="true"><span class="spin-ring"></span></span>
-        </button>
-      </form>
+        <h2>Watch the Full Demo &amp; Get the Quick-Start Bundle — Free</h2>
+        <p class="optin-sub">Drop your email. We'll send the shortcut straight to your inbox — no fluff, no setup maze.</p>
 
-      <div class="below">
-        <span>🔒 Secure & private</span>
-        <span>📬 Instant delivery</span>
-        <span>✕ Unsubscribe anytime</span>
+        <ul class="gets">
+          <li><strong>Full demo video</strong> — see OpenClaw running before you spend a dollar</li>
+          <li><strong>30-min Quick-Start Guide</strong> — live in under 30 minutes, zero code required</li>
+          <li><strong>Pricing breakdown</strong> — exactly what's included and what it costs</li>
+        </ul>
+
+        <form id="optinForm" novalidate>
+          <div class="form-fields">
+            <input type="text"   id="fieldName"  class="ic-input" placeholder="Your first name" autocomplete="given-name" />
+            <input type="email"  id="fieldEmail" class="ic-input" placeholder="Your best email address" autocomplete="email" required />
+          </div>
+          <button type="submit" class="cta-btn" id="submitBtn">
+            <span class="cta-label">Yes — Send Me Instant Access →</span>
+            <span class="cta-spin" aria-hidden="true"><span class="spin-ring"></span></span>
+          </button>
+        </form>
+
+        <div class="below">
+          <span>🔒 No spam, ever</span>
+          <span>⚡ Instant delivery</span>
+          <span>✕ Unsubscribe anytime</span>
+        </div>
+
+        <p class="legal">
+          By submitting you agree to our
+          <a href="/terms.html" target="_blank" rel="noopener">Terms</a> and
+          <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
+        </p>
+        <p class="aff"><strong>Affiliate notice:</strong> this page contains affiliate links — we may earn a commission at no extra cost to you.</p>
+
       </div>
-
-      <p class="legal">
-        By submitting, you agree to the
-        <a href="/terms.html" target="_blank" rel="noopener">Terms of Service</a>
-        and
-        <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.
-        We'll never share your email.
-      </p>
-
-      <p class="aff">
-        <strong>Affiliate notice:</strong> this page contains affiliate links — we may earn a commission at no extra cost to you.
-      </p>
     </div>
 
     <!-- Footer -->
