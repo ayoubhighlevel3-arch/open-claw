@@ -289,6 +289,14 @@
       border-color: rgba(239,68,68,.7);
       box-shadow: 0 0 0 4px rgba(239,68,68,.12);
     }
+    .field-error {
+      font-size: 12px;
+      color: #f87171;
+      margin-top: 6px;
+      display: none;
+      padding-left: 4px;
+    }
+    .field-error.show { display: block; }
 
     .cta-btn {
       position: relative;
@@ -536,13 +544,12 @@
       </h1>
 
       <p class="hero-body">
-        OpenClaw is a genuinely powerful AI agent platform — but getting it set up from scratch can
-        <strong>eat your whole weekend, cost extra money, and still leave you stuck.</strong>
-        InstantlyClaw is the shortcut. One click, hosted, done.
+        OpenClaw is a powerful AI agent platform — but it can still eat up your weekend, cost you extra setup money, and create technical headaches if you try to piece everything together yourself.
+        <strong>InstantlyClaw removes the friction. One click. Faster setup. Done.</strong>
       </p>
 
       <p class="hero-kicker">
-        Live and running before your next meeting.
+        Your hosted, ready-to-use AI system — live before your coffee gets cold.
       </p>
     </div>
 
@@ -591,8 +598,8 @@
 
         <form id="optinForm" novalidate>
           <div class="form-fields">
-            <input type="text"  id="fieldName"  class="ic-input" placeholder="First name" autocomplete="given-name" />
             <input type="email" id="fieldEmail" class="ic-input" placeholder="Email address" autocomplete="email" required />
+            <p class="field-error" id="emailError"></p>
           </div>
           <button type="submit" class="cta-btn" id="submitBtn">
             <span class="cta-label">Yes — Send Me Instant Access →</span>
@@ -639,28 +646,93 @@
 <script>
   /* ─── CONFIG ── fill before launch ─── */
   const AFFILIATE_LINK  = "https://jvz8.com/c/3492357/436241/";
-  const GHL_WEBHOOK_URL = ""; // ← your GoHighLevel webhook URL
+  const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/6S3PtTornMgAicGBISo3/webhook-trigger/e65475f7-c912-4dee-8cef-512917274820";
   const REDIRECT_DELAY  = 1900;
   /* ─────────────────────────────────── */
+
+  /* ── DISPOSABLE / FAKE EMAIL BLOCKLIST ── */
+  const BLOCKED_DOMAINS = new Set([
+    "mailinator.com","guerrillamail.com","guerrillamail.net","guerrillamail.org",
+    "guerrillamail.biz","guerrillamail.de","guerrillamail.info","guerrillamailblock.com",
+    "grr.la","sharklasers.com","guerrillamailblock.com","spam4.me","yopmail.com",
+    "yopmail.fr","cool.fr.nf","jetable.fr.nf","nospam.ze.tc","nomail.xl.cx",
+    "mega.zik.dj","speed.1s.fr","courriel.fr.nf","moncourrier.fr.nf","monemail.fr.nf",
+    "monmail.fr.nf","trashmail.com","trashmail.me","trashmail.net","trashmail.at",
+    "trashmail.io","trashmail.org","trashmailer.com","trash-mail.at","dispostable.com",
+    "maildrop.cc","throwam.com","throwam.net","mailnull.com","spamgourmet.com",
+    "spamgourmet.net","spamgourmet.org","binkmail.com","bob.email","clrmail.com",
+    "discard.email","discardmail.com","discardmail.de","fakeinbox.com","filzmail.com",
+    "fleckens.hu","getonemail.com","hmamail.com","incognitomail.com","incognitomail.net",
+    "incognitomail.org","inoutmail.de","inoutmail.eu","inoutmail.info","inoutmail.net",
+    "itamail.com","keepmymail.com","klassmaster.com","klassmaster.net","lol.ovpn.to",
+    "mailexpire.com","mailfreeonline.com","mailguard.me","mailin8r.com","mailnew.com",
+    "mailscrap.com","mailsiphon.com","mailslapping.com","mailzilla.com","mbx.cc",
+    "meltmail.com","momentics.ru","mt2014.com","mt2015.com","myspaceinc.com",
+    "myspaceinc.net","myspaceinc.org","myspacepimpedup.com","neverbox.com",
+    "nobulk.com","noclickemail.com","nomail.pw","nomail.xl.cx","nospam4.us",
+    "nowhere.org","nowmymail.com","objectmail.com","obobbo.com","oneoffemail.com",
+    "onewaymail.com","pookmail.com","powered.name","proxymail.eu","rcpt.at",
+    "rklips.com","rmqkr.net","royal.net","rppkn.com","rtrtr.com","s0ny.net",
+    "safe-mail.net","shortmail.net","sibmail.com","skeefmail.com","slopsbox.com",
+    "smellfear.com","smellrear.com","snakemail.com","sneakemail.com","snkmail.com",
+    "sofimail.com","sogetthis.com","soodonims.com","spam.la","spamavert.com",
+    "spamfree24.org","spamhole.com","spamify.com","spaminator.de","spamkill.info",
+    "spaml.de","spammotel.com","spamoff.de","spamslicer.com","spamspot.com",
+    "spamthisplease.com","speed.1s.fr","supergreatmail.com","supermailer.jp",
+    "suremail.info","sweetxxx.de","tafmail.com","tagyourself.com","teewars.org",
+    "tempe-mail.com","tempinbox.co.uk","tempinbox.com","tempomail.fr","temporaryemail.net",
+    "temporaryemail.us","temporaryforwarding.com","temporaryinbox.com","tempymail.com",
+    "thanksnospam.info","that.codes","thisisnotmyrealemail.com","throam.com",
+    "throwam.com","throwaway.email","tmail.com","tmailinator.com","toiea.com",
+    "tradermail.info","uggsrock.com","uroid.com","wegwerfmail.de","wegwerfmail.net",
+    "wegwerfmail.org","wh4f.org","whyspam.me","willhackforfood.biz","willselfdestruct.com",
+    "winemaven.info","wronghead.com","wuzupmail.net","xagloo.com","xemaps.com",
+    "xents.com","xmaily.com","xoxy.net","xyzfree.net","yapped.net","yeah.net",
+    "yogamaven.com","yopmail.gq","yopmail.pp.ua","youmail.ga","yourdomain.com",
+    "yourlifesucks.pw","ypmail.webarnak.fr.eu.org","yuurok.com","z1p.biz",
+    "za.com","zehnminuten.de","zehnminutenmail.de","zippymail.info","zoemail.net",
+    "zoemail.org","zomg.info","test.com","example.com","fake.com","noemail.com",
+    "noemail.net","noemail.org"
+  ]);
+
+  function validateEmail(email) {
+    if (!email) return "Please enter your email address.";
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) return "Please enter a valid email address.";
+    const domain = email.split("@")[1].toLowerCase();
+    if (BLOCKED_DOMAINS.has(domain)) return "Disposable emails not accepted. Please use a real email.";
+    const local = email.split("@")[0].toLowerCase();
+    const fakePatterns = /^(test|fake|asdf|qwerty|noemail|nope|nobody|null|undefined|admin|foo|bar|baz|example|sample|temp|trash|junk|spam|random|aaaa|bbbb|cccc|1234|abcd)/;
+    if (fakePatterns.test(local)) return "Please use your real email address.";
+    return null;
+  }
 
   /* ── FORM ── */
   const form      = document.getElementById("optinForm");
   const emailEl   = document.getElementById("fieldEmail");
-  const nameEl    = document.getElementById("fieldName");
+  const emailErr  = document.getElementById("emailError");
   const submitBtn = document.getElementById("submitBtn");
   const modal     = document.getElementById("modalOverlay");
   const modalBar  = document.getElementById("modalBar");
+
+  function showError(msg) {
+    emailEl.classList.add("err");
+    emailErr.textContent = msg;
+    emailErr.classList.add("show");
+    emailEl.focus();
+    setTimeout(() => {
+      emailEl.classList.remove("err");
+      emailErr.classList.remove("show");
+    }, 3500);
+  }
 
   form.addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const email = emailEl.value.trim();
-    const name  = nameEl.value.trim();
-
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      emailEl.classList.add("err");
-      emailEl.focus();
-      setTimeout(() => emailEl.classList.remove("err"), 2600);
+    const validationError = validateEmail(email);
+    if (validationError) {
+      showError(validationError);
       return;
     }
 
@@ -673,10 +745,10 @@
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            firstName : name  || undefined,
             email     : email,
-            source    : "InstantlyClaw Funnel",
-            tags      : ["openclaw-optin"]
+            source    : "OpenClaw Funnel — Meta 1 (Original)",
+            funnel    : "meta-1",
+            tags      : ["openclaw-optin", "funnel-meta-1"]
           })
         });
       }
@@ -689,7 +761,7 @@
       modalBar.style.width = "100%";
     }));
 
-    setTimeout(() => { window.location.href = AFFILIATE_LINK; }, REDIRECT_DELAY);
+    setTimeout(() => { window.location.href = "/thank-you.html"; }, REDIRECT_DELAY);
   });
 
   /* ── VIDEO FALLBACK ── */

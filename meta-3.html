@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>InstantlyClaw — Deploy OpenClaw in Minutes</title>
+  <meta name="description" content="Skip the OpenClaw setup nightmare and get your hosted system live today." />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; overflow-x: hidden; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #09090f;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Minimalist ambient glow */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; right: 0; width: 600px; height: 600px;
+      background: radial-gradient(circle at top right, rgba(245, 166, 35, 0.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* ── HEADER ── */
+    .brand {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    .brand span {
+      display: block; width: 12px; height: 12px;
+      background: #f5a623; border-radius: 3px;
+      box-shadow: 0 0 12px rgba(245,166,35,0.6);
+    }
+
+    /* ── SPLIT LAYOUT ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .content-grid {
+        grid-template-columns: 1fr 1.1fr;
+        gap: 80px;
+      }
+    }
+
+    /* ── LEFT: VIDEO ── */
+    .media-col {
+      order: 2; /* Move to bottom on mobile */
+      animation: fadeIn 0.6s ease both;
+    }
+    @media (min-width: 900px) {
+      .media-col { order: 1; }
+    }
+
+    .laptop {
+      position: relative;
+      background: #121215;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px 12px 8px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+    }
+    .laptop-top {
+      display: flex; gap: 6px; padding: 0 4px 10px;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #27c840; }
+
+    .screen {
+      position: relative;
+      padding-top: 56.25%;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .screen iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+    }
+
+    /* ── RIGHT: COPY & FORM ── */
+    .copy-col {
+      order: 1;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .prehead {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #f5a623;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 60px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 24px;
+      color: #fff;
+    }
+
+    .benefits {
+      list-style: none;
+      margin-bottom: 36px;
+    }
+    .benefits li {
+      position: relative;
+      padding-left: 32px;
+      font-size: 17px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .benefits li::before {
+      content: "✓";
+      position: absolute;
+      left: 0; top: 0;
+      width: 20px; height: 20px;
+      background: rgba(245, 166, 35, 0.15);
+      color: #f5a623;
+      font-weight: bold;
+      font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+    }
+    .benefits li strong { color: #fff; }
+
+    /* ── OPT-IN ── */
+    .form-wrapper {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .form-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ic-input {
+      width: 100%;
+      height: 58px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 0 16px;
+      font-size: 16px;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      outline: none;
+      transition: all .2s;
+    }
+    .ic-input:focus {
+      border-color: #f5a623;
+      background: rgba(255,255,255,0.02);
+      box-shadow: 0 0 0 4px rgba(245,166,35,0.15);
+    }
+    .ic-input.err { border-color: #ef4444; }
+    .field-error {
+      font-size: 12px;
+      color: #f87171;
+      margin-top: 6px;
+      display: none;
+      padding-left: 4px;
+    }
+    .field-error.show { display: block; }
+
+    .cta-btn {
+      width: 100%;
+      height: 58px;
+      border: none;
+      border-radius: 10px;
+      background: #f5a623;
+      color: #000;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(245,166,35,0.25);
+      transition: all .2s;
+      position: relative;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(245,166,35,0.35);
+      filter: brightness(1.05);
+    }
+
+    .cta-label { position: relative; z-index: 1; }
+    .cta-spin {
+      position: absolute; inset: 0;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cta-btn.loading .cta-label { visibility: hidden; }
+    .cta-btn.loading .cta-spin { display: flex; }
+    .spin-ring {
+      width: 22px; height: 22px;
+      border: 3px solid rgba(0,0,0,0.2);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Trust indicators under form */
+    .trust-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+    }
+    .trust-row .spam {
+      font-size: 12px; color: rgba(255,255,255,0.4);
+      display:flex; align-items:center; gap:6px;
+    }
+
+    .social-proof {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .avatars { display: flex; }
+    .avatars img {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid #202024; margin-left: -10px;
+    }
+    .avatars img:first-child { margin-left: 0; }
+    .s-text { font-size: 12px; color: rgba(255,255,255,0.6); font-weight: 600; }
+    .s-text strong { color: #f5a623; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.2);
+    }
+    .footer a { color: rgba(255,255,255,0.3); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
+    .modal-box {
+      background: #121215; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 40px 32px;
+      text-align: center; max-width: 420px; width: 100%;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+    }
+    .modal-box .icon { font-size: 40px; margin-bottom: 16px; }
+    .modal-box h3 { font-size: 24px; color: #fff; margin-bottom: 8px; font-weight: 800; }
+    .modal-box p { color: rgba(255,255,255,0.6); font-size: 15px; }
+    .modal-prog { margin-top: 24px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+    .modal-bar { height: 100%; width: 0%; background: #f5a623; transition: width 1.8s linear; }
+
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  
+  <div class="brand">
+    <span></span> InstantlyClaw
+  </div>
+
+  <div class="content-grid">
+    
+    <!-- LEFT: Media -->
+    <div class="media-col">
+      <div class="laptop">
+        <div class="laptop-top">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+        </div>
+        <div class="screen">
+          <iframe src="https://player.vimeo.com/video/1175925647?badge=0&autopause=0&player_id=0&app_id=58479" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="InstantlyClaw Demo"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Copy & Form -->
+    <div class="copy-col">
+      <span class="prehead">Free Demo & Quick-Start Guide</span>
+      <h1>Deploy OpenClaw in Minutes, Not Weekends.</h1>
+      
+      <ul class="benefits">
+        <li><strong>Skip the technical headache</strong> and hosting nightmare completely.</li>
+        <li>Get a <strong>fully managed, ready-to-use</strong> AI agent system today.</li>
+        <li><strong>One-click instant access.</strong> Live before your coffee gets cold.</li>
+      </ul>
+
+      <div class="form-wrapper">
+        <form id="optinForm" novalidate>
+          <div class="form-fields">
+            <input type="email" id="fieldEmail" class="ic-input" placeholder="Enter your email address" required />
+            <p class="field-error" id="emailError"></p>
+          </div>
+          <button type="submit" class="cta-btn" id="submitBtn">
+            <span class="cta-label">Send My Free Access &rarr;</span>
+            <span class="cta-spin"><span class="spin-ring"></span></span>
+          </button>
+        </form>
+
+        <div class="trust-row">
+          <div class="spam">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg>
+            100% Secure. No Spam.
+          </div>
+          <div class="social-proof">
+            <div class="avatars">
+              <img src="https://i.pravatar.cc/100?img=11" alt="User">
+              <img src="https://i.pravatar.cc/100?img=33" alt="User">
+              <img src="https://i.pravatar.cc/100?img=60" alt="User">
+            </div>
+            <span class="s-text"><strong>1,247+</strong> Users</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>© 2025 InstantlyClaw. Results vary. <a href="/privacy.html" target="_blank">Privacy</a> &middot; <a href="/terms.html" target="_blank">Terms</a></p>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="icon">✅</div>
+    <h3>Access Granted!</h3>
+    <p>Check your inbox. We're redirecting you to your dashboard now...</p>
+    <div class="modal-prog"><div class="modal-bar" id="modalBar"></div></div>
+  </div>
+</div>
+
+<script>
+  const AFFILIATE_LINK  = "https://jvz8.com/c/3492357/436241/";
+  const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/6S3PtTornMgAicGBISo3/webhook-trigger/e65475f7-c912-4dee-8cef-512917274820";
+  const REDIRECT_DELAY  = 1900;
+
+  /* ── DISPOSABLE / FAKE EMAIL BLOCKLIST ── */
+  const BLOCKED_DOMAINS = new Set([
+    "mailinator.com","guerrillamail.com","guerrillamail.net","guerrillamail.org",
+    "guerrillamail.biz","guerrillamail.de","guerrillamail.info","guerrillamailblock.com",
+    "grr.la","sharklasers.com","spam4.me","yopmail.com","yopmail.fr","trashmail.com",
+    "trashmail.me","trashmail.net","trashmail.at","trashmail.io","trashmail.org",
+    "maildrop.cc","throwam.com","throwaway.email","mailnull.com","spamgourmet.com",
+    "discard.email","discardmail.com","fakeinbox.com","tempe-mail.com","tempinbox.com",
+    "tempomail.fr","temporaryemail.net","temporaryemail.us","temporaryinbox.com",
+    "tmail.com","tmailinator.com","throwaway.email","dispostable.com",
+    "test.com","example.com","fake.com","noemail.com","noemail.net","noemail.org"
+  ]);
+
+  function validateEmail(email) {
+    if (!email) return "Please enter your email address.";
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) return "Please enter a valid email address.";
+    const domain = email.split("@")[1].toLowerCase();
+    if (BLOCKED_DOMAINS.has(domain)) return "Disposable emails not accepted. Please use a real email.";
+    const local = email.split("@")[0].toLowerCase();
+    const fakePatterns = /^(test|fake|asdf|qwerty|noemail|nope|nobody|null|undefined|admin|foo|bar|baz|example|sample|temp|trash|junk|spam|random|aaaa|bbbb|cccc|1234|abcd)/;
+    if (fakePatterns.test(local)) return "Please use your real email address.";
+    return null;
+  }
+
+  const form = document.getElementById("optinForm");
+  const emailEl = document.getElementById("fieldEmail");
+  const emailErr = document.getElementById("emailError");
+  const submitBtn = document.getElementById("submitBtn");
+  const modal = document.getElementById("modalOverlay");
+  const modalBar = document.getElementById("modalBar");
+
+  function showError(msg) {
+    emailEl.classList.add("err");
+    emailErr.textContent = msg;
+    emailErr.classList.add("show");
+    emailEl.focus();
+    setTimeout(() => { emailEl.classList.remove("err"); emailErr.classList.remove("show"); }, 3500);
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = emailEl.value.trim();
+    const validationError = validateEmail(email);
+    if (validationError) { showError(validationError); return; }
+
+    submitBtn.classList.add("loading");
+    submitBtn.disabled = true;
+
+    if (GHL_WEBHOOK_URL) {
+      try {
+        await fetch(GHL_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, source: "OpenClaw Funnel — Meta 3 (CRO)", funnel: "meta-3", tags: ["openclaw-optin", "funnel-meta-3"] })
+        });
+      } catch (e) {}
+    }
+
+    modal.classList.add("show");
+    setTimeout(() => { modalBar.style.width = "100%"; }, 50);
+    setTimeout(() => { window.location.href = "/thank-you.html"; }, REDIRECT_DELAY);
+  });
+</script>
+
+</body>
+</html>
