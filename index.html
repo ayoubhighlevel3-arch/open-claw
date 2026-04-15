@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InstantlyClaw — Get OpenClaw Running Without the Headaches</title>
+  <meta name="description" content="Skip the OpenClaw setup nightmare and get your hosted system live today." />
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- Instant redirect to primary funnel -->
+  <meta http-equiv="refresh" content="0;url=/meta-1.html" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      background: #09090f;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    .loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .brand {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.6);
+    }
+    .brand-dot {
+      width: 10px; height: 10px;
+      background: #f5a623;
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(245,166,35,0.7);
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: #f5a623;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="loader">
+    <div class="brand">
+      <span class="brand-dot"></span>InstantlyClaw
+    </div>
+    <div class="spinner"></div>
+    <p>Loading your access page…</p>
+  </div>
+  <script>
+    // JS fallback in case meta refresh is blocked
+    window.location.replace("/meta-1.html");
+  </script>
+</body>
+</html>
