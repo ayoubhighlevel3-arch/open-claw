@@ -7,6 +7,19 @@
   <meta name="description" content="Skip the OpenClaw setup nightmare and get your hosted system live today." />
   <meta name="robots" content="noindex, nofollow" />
 
+  <!-- Meta Pixel -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','834227419694314');fbq('track','PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=834227419694314&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -186,11 +199,15 @@
       border: 1.5px solid rgba(255,255,255,0.1);
       border-radius: 10px;
       padding: 0 16px;
-      font-size: 16px;
+      font-size: 16px; /* never below 16px — prevents iOS auto-zoom on focus */
+      font-family: 'Inter', sans-serif;
       color: #fff;
       background: rgba(0,0,0,0.5);
       outline: none;
       transition: all .2s;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
     .ic-input:focus {
       border-color: #f5a623;
@@ -216,12 +233,17 @@
       color: #000;
       font-size: 17px;
       font-weight: 800;
+      font-family: 'Inter', sans-serif;
       cursor: pointer;
+      touch-action: manipulation; /* removes 300ms tap delay on Android/older iOS */
       box-shadow: 0 8px 20px rgba(245,166,35,0.25);
       transition: all .2s;
       position: relative;
       overflow: hidden;
       margin-top: 12px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
     .cta-btn:hover {
       transform: translateY(-2px);
@@ -286,7 +308,9 @@
     /* ── MODAL ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 999;
-      background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+      background: rgba(0,0,0,0.85);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
       align-items: center; justify-content: center; padding: 20px;
     }
     .modal-overlay.show { display: flex; animation: fadeIn 0.2s; }
@@ -342,7 +366,7 @@
       <div class="form-wrapper">
         <form id="optinForm" novalidate>
           <div class="form-fields">
-            <input type="email" id="fieldEmail" class="ic-input" placeholder="Enter your email address" required />
+            <input type="email" id="fieldEmail" class="ic-input" placeholder="Enter your email address" autocomplete="email" required />
             <p class="field-error" id="emailError"></p>
           </div>
           <button type="submit" class="cta-btn" id="submitBtn">
@@ -390,7 +414,7 @@
 <script>
   const AFFILIATE_LINK  = "https://jvz8.com/c/3492357/436241/";
   const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/6S3PtTornMgAicGBISo3/webhook-trigger/e65475f7-c912-4dee-8cef-512917274820";
-  const REDIRECT_DELAY  = 1900;
+  const REDIRECT_DELAY  = 0;
 
   /* ── DISPOSABLE / FAKE EMAIL BLOCKLIST ── */
   const BLOCKED_DOMAINS = new Set([
@@ -432,28 +456,27 @@
     setTimeout(() => { emailEl.classList.remove("err"); emailErr.classList.remove("show"); }, 3500);
   }
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
     const email = emailEl.value.trim();
     const validationError = validateEmail(email);
     if (validationError) { showError(validationError); return; }
 
-    submitBtn.classList.add("loading");
-    submitBtn.disabled = true;
-
+    // Fire webhook in background — keepalive ensures it survives page navigation
     if (GHL_WEBHOOK_URL) {
-      try {
-        await fetch(GHL_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, source: "OpenClaw Funnel — Meta 3 (CRO)", funnel: "meta-3", tags: ["openclaw-optin", "funnel-meta-3"] })
-        });
-      } catch (e) {}
+      fetch(GHL_WEBHOOK_URL, {
+        method   : "POST",
+        keepalive: true, /* survives navigation away from the page */
+        headers  : { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "OpenClaw Funnel — Meta 3 (CRO)", funnel: "meta-3", tags: ["openclaw-optin", "funnel-meta-3"] })
+      }).catch(function() {});
     }
 
-    modal.classList.add("show");
-    setTimeout(() => { modalBar.style.width = "100%"; }, 50);
-    setTimeout(() => { window.location.href = "/thank-you.html"; }, REDIRECT_DELAY);
+    // Track Lead conversion in Meta Pixel
+    fbq('track', 'Lead');
+
+    // Redirect instantly — no delay, no modal wait
+    window.location.href = AFFILIATE_LINK;
   });
 </script>
 

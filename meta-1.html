@@ -7,6 +7,19 @@
   <meta name="description" content="OpenClaw is the AI agent platform everyone's talking about. Skip the setup nightmare and get your hosted system live today." />
   <meta name="robots" content="noindex, nofollow" />
 
+  <!-- Meta Pixel -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','834227419694314');fbq('track','PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=834227419694314&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -271,13 +284,15 @@
       border: 1.5px solid rgba(255,255,255,.1);
       border-radius: 11px;
       padding: 0 16px;
-      font-size: 15px;
+      font-size: 16px; /* always 16px — prevents iOS auto-zoom on focus */
       font-family: 'Inter', sans-serif;
       color: #fff;
       background: rgba(255,255,255,.055);
       outline: none;
       transition: border-color .18s, box-shadow .18s, background .18s;
       -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
     .ic-input::placeholder { color: rgba(255,255,255,.25); }
     .ic-input:focus {
@@ -312,9 +327,12 @@
       font-weight: 900;
       letter-spacing: .01em;
       cursor: pointer;
+      touch-action: manipulation; /* removes 300ms tap delay on Android/older iOS */
       box-shadow: 0 12px 32px rgba(245,166,35,.38), inset 0 1px 0 rgba(255,255,255,.18);
       transition: filter .15s, transform .15s, box-shadow .15s;
       -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
       margin-top: 2px;
     }
     .cta-btn:hover {
@@ -385,8 +403,8 @@
       inset: 0;
       z-index: 9999;
       background: rgba(0,0,0,.75);
-      backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
       align-items: center;
       justify-content: center;
       padding: 20px;
@@ -494,7 +512,7 @@
       .form-fields  { gap: 9px; margin-bottom: 9px; }
       .ic-input {
         height: 52px;
-        font-size: 16px; /* prevents iOS auto-zoom */
+        font-size: 16px;
         border-radius: 10px;
         padding: 0 14px;
       }
@@ -647,7 +665,7 @@
   /* ─── CONFIG ── fill before launch ─── */
   const AFFILIATE_LINK  = "https://jvz8.com/c/3492357/436241/";
   const GHL_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/6S3PtTornMgAicGBISo3/webhook-trigger/e65475f7-c912-4dee-8cef-512917274820";
-  const REDIRECT_DELAY  = 1900;
+  const REDIRECT_DELAY  = 0;
   /* ─────────────────────────────────── */
 
   /* ── DISPOSABLE / FAKE EMAIL BLOCKLIST ── */
@@ -726,7 +744,7 @@
     }, 3500);
   }
 
-  form.addEventListener("submit", async function(e) {
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
 
     const email = emailEl.value.trim();
@@ -736,32 +754,26 @@
       return;
     }
 
-    submitBtn.classList.add("loading");
-    submitBtn.disabled = true;
-
-    try {
-      if (GHL_WEBHOOK_URL) {
-        await fetch(GHL_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email     : email,
-            source    : "OpenClaw Funnel — Meta 1 (Original)",
-            funnel    : "meta-1",
-            tags      : ["openclaw-optin", "funnel-meta-1"]
-          })
-        });
-      }
-    } catch (err) {
-      console.warn("Webhook (non-blocking):", err);
+    // Fire webhook in background — keepalive ensures it survives page navigation
+    if (GHL_WEBHOOK_URL) {
+      fetch(GHL_WEBHOOK_URL, {
+        method   : "POST",
+        keepalive: true, /* survives navigation away from the page */
+        headers  : { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email  : email,
+          source : "OpenClaw Funnel — Meta 1 (Original)",
+          funnel : "meta-1",
+          tags   : ["openclaw-optin", "funnel-meta-1"]
+        })
+      }).catch(function() {});
     }
 
-    modal.classList.add("show");
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      modalBar.style.width = "100%";
-    }));
+    // Track Lead conversion in Meta Pixel
+    fbq('track', 'Lead');
 
-    setTimeout(() => { window.location.href = "/thank-you.html"; }, REDIRECT_DELAY);
+    // Redirect instantly — no delay, no modal wait
+    window.location.href = AFFILIATE_LINK;
   });
 
   /* ── VIDEO FALLBACK ── */
